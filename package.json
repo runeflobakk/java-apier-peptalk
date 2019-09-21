@@ -1,0 +1,7 @@
+{
+  "start": "fusuma start",
+  "build": "fusuma build",
+  "pdf": "fusuma pdf",
+  "live": "fusuma live -w '@nodejs'",
+  "deploy": "fusuma deploy"
+}
