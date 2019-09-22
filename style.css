@@ -1,59 +1,26 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans|Oswald&display=swap');
 
-:root {
-  --color-white: #f5f5f5;
-  --color-black: #333;
-  --color-cyan: #7bb7fa;
-  --color-emphasize: #a61c68;
-}
-
 html {
-  /* set the base font-size */
   font-size: 130%;
-}
-
-body {
-  /* set the default background */
-  background: var(--color-white);
-
-  /* set the default font-color */
-  color: var(--color-black);
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Oswald', sans-serif;
 }
 
-/* code blocks */
-code[class*='language-'],
-pre[class*='language-'] {
-  font-size: 2rem;
-}
-
-a {
-  /* set the default link color */
-  color: var(--color-cyan);
-}
 
 u {
   text-decoration: none;
-  color: var(--color-emphasize);
+  color: #a61c68;
 }
 
-/* https://hiroppy.github.io/fusuma/docs/guides/slide-syntax#declaring-section-title */
-.section-title {
-}
-
-.title {
-}
-
-.developer-ux-background {
+html.ux-for-devs body {
   background-image: url('https://source.unsplash.com/KsBkeh3y4XM/1600x900');
   background-size: 100%;
   background-repeat: no-repeat;
 }
 
-.developer-ux-background > h1 {
-  color: var(--color-white);
-  background-color: var(--color-black);
+html.ux-for-devs h1 {
+  color: #f5f5f5;
+  background-color: rgba(0,0,0,0.7);
 }

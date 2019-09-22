@@ -1,7 +1,9 @@
 {
-  "start": "fusuma start",
-  "build": "fusuma build",
-  "pdf": "fusuma pdf",
-  "live": "fusuma live -w '@nodejs'",
-  "deploy": "fusuma deploy"
+  "name": "java-apier-intro",
+  "version": "1.0.0",
+  "description": "Intro-talk til faggruppemøte for Java- og APIer-faggruppene",
+  "license": "MIT",
+  "devDependencies": {
+    "reveal-md": "^3.3.0"
+  }
 }

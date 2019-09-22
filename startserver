@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+REVEAL_PORT=${PORT:-37777}
+echo "Reveal server port: ${REVEAL_PORT}"
+./node_modules/reveal-md/bin/reveal-md.js slides.md --port ${REVEAL_PORT} --disable-auto-open $@
