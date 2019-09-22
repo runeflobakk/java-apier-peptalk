@@ -13,8 +13,10 @@ slide:
   code:
     languages:
       - javascript
+      - clike
+      - java
     plugins: []
-    theme: default
+    theme: dark
   chart: false
   math: false
 extends:
