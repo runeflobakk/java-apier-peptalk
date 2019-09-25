@@ -1,6 +1,14 @@
 
-
 # API. Java.
+
+Note:
+I dag skal vi snakke om programmerings-APIer!
+
+Er det noe bibliotek eller rammeverk du liker spesielt godt å jobbe med?
+Noe som liksom har den riktige signal-to-noise ratioen? Dette er en fryd å bruke? Dette er ganske komplisert, men jeg får følelsen av at dette blir riktig når jeg ser koden?
+Da har du sannsynligvis brukt et godt designet API!
+
+Et API er "det du ser" når du bruker en komponent på en maskinell måte. Det kan være alt fra tjenester som tilbys over nettverk, til en klasse man instansierer.
 
 
 ---
@@ -10,12 +18,18 @@ Hva finnes av
 
 # <u>bra</u> API-er for Java?
 
-
 Note:
-- noen som har noen biblioteker eller noe med APIer de liker spesielt godt?
+Noen som har noen biblioteker eller noe med APIer de liker spesielt godt?
+
 - forslag:
-	- Mockito?
-	- Java Time API
+  - Mockito?
+  - Java Time API
+  - Noe i Google Guava?
+
+
+
+
+
 
 
 ---
@@ -27,6 +41,9 @@ Note:
 
 
 Note:
+Når du designer et API så driver du med UX!
+
+
 - idiomatisk
   - konstruksjoner man kjenner igjen skal gjøre det man forventer
   - ikke finne på nye bruksområder for eksisterende "vokabular"
@@ -66,6 +83,8 @@ Har en "kalender" (som egentlig er et punkt på tidslinjen), ber om å få "tide
 
 ## Hva forteller dette API-et oss?
 
+<!-- .slide: data-transition="slide-in fade-out" -->
+
 ```java
 Instant now = Clock.systemUTC().instant();
 
@@ -76,6 +95,9 @@ long ms = now.toEpochMilli();
 // (alt kompilerer altså!)
 ```
 
+Note:
+Instant representeres v.h.a. sekunder fra Epoch. I tillegg virker det som man kan få mer presisjon med å hente ut nanosekunder, mest sannsynlig er dette da antall nanosekunder _av det sekundet fra epoch_. Man har også en mulighet til å regne om dette tidspunktet til antall millisekunder fra epoch, men en Instant er ikke bygget opp med denne verdien selv.
+
 ----
 
 <!-- .slide: data-state="instant-javadoc" -->
@@ -85,7 +107,13 @@ Nye Java Time API har vektlagt å følge Java-_idiomer_:
 - "get" eksponerer tilstand
 - "to" gjør en konvertering til annen representasjon
 
-Dette er idiomer som har eksistert siden tidenes morgen, men som til og med ikke de som har designet API-ene til Java selv har tatt ordentlig inn over seg.
+Dette er idiomer som har eksistert siden tidenes morgen, men som til og med ikke de som har designet API-ene til Java selv har tatt ordentlig inn over seg før i det siste.
+
+
+
+
+
+
 
 ---
 
@@ -105,6 +133,10 @@ var rune = new Rune();
 assertThat(rune.isTehAwesomest());
 ```
 
+Note:
+Klasse med en metode, som gir en fornuftig boolean-verdi tilbake basert på semantikken som indikeres.
+Testen verifiserer dette, den er grønn.
+
 ----
 
 <!-- .slide: data-transition="none" -->
@@ -123,6 +155,8 @@ var rune = new Rune();
 
 assertThat(rune.isTehAwesomest());
 ```
+
+Note: men testen er fortsatt grønn! Wat the wat?
 
 ----
 
