@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>API. Java.</title>
+    <link rel="stylesheet" href="./css/reveal.css" />
+    <link rel="stylesheet" href="./css/theme/black.css" id="theme" />
+    <link rel="stylesheet" href="./css/highlight/agate.css" />
+    <link rel="stylesheet" href="./css/print/paper.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="./_assets/style.css" />
+
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template">
+# API. Java.
+
+<aside class="notes"><p>I dag skal vi snakke om programmerings-APIer!</p>
+<p>Er det noe bibliotek eller rammeverk du liker spesielt godt å jobbe med?
+Noe som liksom har den riktige signal-to-noise ratioen? Dette er en fryd å bruke? Dette er ganske komplisert, men jeg får følelsen av at dette blir riktig når jeg ser koden?
+Da har du sannsynligvis brukt et godt designet API!</p>
+<p>Et API er &quot;det du ser&quot; når du bruker en komponent på en maskinell måte. Det kan være alt fra tjenester som tilbys over nettverk, til en klasse man instansierer.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+
+Hva finnes av
+
+# <u>bra</u> API-er for Java?
+
+<aside class="notes"><p>Noen som har noen biblioteker eller noe med APIer de liker spesielt godt?</p>
+<ul>
+<li>forslag:<ul>
+<li>Mockito?</li>
+<li>Java Time API</li>
+<li>Noe i Google Guava?</li>
+</ul>
+</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template">
+
+<!-- .slide: data-state="ux-for-devs" -->
+
+# UX for utviklere
+
+
+<aside class="notes"><p>Når du designer et API så driver du med UX!</p>
+<ul>
+<li>idiomatisk<ul>
+<li>konstruksjoner man kjenner igjen skal gjøre det man forventer</li>
+<li>ikke finne på nye bruksområder for eksisterende &quot;vokabular&quot;</li>
+<li>principle of least surprise</li>
+</ul>
+</li>
+<li>ledes til å gjøre ting riktig<ul>
+<li>skal helst ikke se fornuftig ut dersom man gjør noe feil</li>
+</ul>
+</li>
+<li>enhetlig<ul>
+<li>har man lært seg et konsept i API-et, skal man kjenne igjen konseptet andre steder</li>
+</ul>
+</li>
+</ul>
+</aside></script></section><section ><section data-markdown><script type="text/template">
+
+# Hva får man her?
+
+```java
+var duration = Duration.ofSeconds(2);
+System.out.println(duration.getNano());
+```
+
+<aside class="notes"><p>Får &#39;0&#39;. Man har vært streng på idiomet at en &quot;getter&quot; er for å eksponere state. Det er <em>ikke</em> snakk om å konvertere en varighet/tidslengde til en annen representasjon, altså 2 sekunder regnet om til nanosekunder.</p>
+</aside></script></section><section data-markdown><script type="text/template">
+## 🤮
+
+```java
+var calendar = Calendar.getInstance();
+var date = calendar.getTime();
+```
+
+<aside class="notes"><p>Har en &quot;kalender&quot; (som egentlig er et punkt på tidslinjen), ber om å få &quot;tiden&quot;, får kalenderen representert som en &quot;dato&quot; (som er en annen representasjon for et punkt på tidslinjen). Altså snakk om en konvertering fra en type til en annen, og man kaller en &quot;getter&quot;.</p>
+</aside></script></section><section data-markdown><script type="text/template">
+## Hva forteller dette API-et oss?
+
+<!-- .slide: data-transition="slide-in fade-out" -->
+
+```java
+Instant now = Clock.systemUTC().instant();
+
+long s = now.getEpochSecond();
+int ns = now.getNano();
+long ms = now.toEpochMilli();
+
+// (alt kompilerer altså!)
+```
+
+<aside class="notes"><p>Instant representeres v.h.a. sekunder fra Epoch. I tillegg virker det som man kan få mer presisjon med å hente ut nanosekunder, mest sannsynlig er dette da antall nanosekunder <em>av det sekundet fra epoch</em>. Man har også en mulighet til å regne om dette tidspunktet til antall millisekunder fra epoch, men en Instant er ikke bygget opp med denne verdien selv.</p>
+</aside></script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-state="instant-javadoc" -->
+
+<aside class="notes"><p>Nye Java Time API har vektlagt å følge Java-<em>idiomer</em>:</p>
+<ul>
+<li>&quot;get&quot; eksponerer tilstand</li>
+<li>&quot;to&quot; gjør en konvertering til annen representasjon</li>
+</ul>
+<p>Dette er idiomer som har eksistert siden tidenes morgen, men som til og med ikke de som har designet API-ene til Java selv har tatt ordentlig inn over seg før i det siste.</p>
+</aside></script></section></section><section ><section data-markdown><script type="text/template">
+## Ser saklig ut? ✅
+
+<!-- .slide: data-transition="none-out" -->
+
+```java
+class Rune {
+    boolean isTehAwesomest() {
+        return true;
+    }
+}
+
+var rune = new Rune();
+
+assertThat(rune.isTehAwesomest());
+```
+
+<aside class="notes"><p>Klasse med en metode, som gir en fornuftig boolean-verdi tilbake basert på semantikken som indikeres.
+Testen verifiserer dette, den er grønn.</p>
+</aside></script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-transition="none" -->
+
+
+## Ikke nå vel? 🤔
+
+```java
+class Rune {
+    boolean isTehAwesomest() {
+        return false; // 🙀
+    }
+}
+
+var rune = new Rune();
+
+assertThat(rune.isTehAwesomest());
+```
+
+<aside class="notes"><p>men testen er fortsatt grønn! Wat the wat?</p>
+</aside></script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-transition="none-in" -->
+
+## AssertJ 🙄
+
+```java
+class Rune {
+    boolean isTehAwesomest() {
+        return false; // 🙀
+    }
+}
+
+var rune = new Rune();
+
+assertThat(rune.isTehAwesomest()).isTrue();
+```
+
+<aside class="notes"><p>Ser fornuftig ut, semantikken stemmer når man leser, men har likevel ikke brukt API-et riktig.
+Ingen indikasjon på feil bruk.</p>
+</aside></script></section></section><section ><section data-markdown><script type="text/template">
+
+## <u>Enhetlige</u> API-er
+
+Identifiser konvensjoner i egen kode
+
+Sørg for å overholde de!
+
+
+
+</script></section><section data-markdown><script type="text/template">
+## <u>Enhetlige</u> API-er
+
+```java
+@Resource CustomerRepository customerRepository;
+
+...
+
+Customer customer = customerRepository.get(auth);
+
+Cart cart = customer.startNewCart();
+```
+</script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-state="nullpointerexception" -->
+
+## `NullPointerException`
+
+##### `customer.startNewCart()`
+
+<aside class="notes"><p>Får NPE når man bruker kundeobjektet man <em>tror</em> man har fått.</p>
+</aside></script></section><section data-markdown><script type="text/template">
+## <u>Enhetlige</u> API-er
+
+`get` vs. `find`
+
+- `get` indikerer en forventning om at noe er tilgjengelig
+- `find` indikerer at man prøver å få tak i noe man ikke er sikker på finnes
+</script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-transition="none-out" -->
+
+#### `.get(..) -> Customer`
+
+```java
+@Resource CustomerRepository customerRepository;
+
+...
+
+Customer customer = customerRepository.get(auth); // 💥
+
+Cart cart = customer.startNewCart();
+```
+
+<aside class="notes"><p>Er man i en kontekst hvor det er forventet at kunden finnes? I så fall er det riktig å kalle <code>get</code>, og den skal kaste exception dersom kunden <em>ikke</em> finnes. Da får du feilen der den skjer, og risikerer ikke at <code>null</code> propageres videre, og man får en NullPointerException et annet sted, og man må tracke seg tilbake hvor det er <em>mulig</em> at den kan ha oppstått.</p>
+</aside></script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-transition="none" -->
+
+#### `.find(..) -> Optional<Customer>`
+
+```java
+@Resource CustomerRepository customerRepository;
+
+...
+
+Customer customer = customerRepository
+         .find(auth)         // Optional<Customer>
+         .orElseGet(() -> customerRepository.create(auth));
+Cart cart = customer.startNewCart();
+```
+
+<aside class="notes"><p>Vet man ikke om kunden eksisterer er det riktig å kalle en find-metode, og man skal da få en <code>Optional</code> tilbake, som tvinger deg til å håndtere muligheten for at den ikke finnes.</p>
+</aside></script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-transition="none" -->
+
+#### `.find(..) -> Optional<Customer>`
+
+```java
+@Resource CustomerRepository customerRepository;
+
+...
+
+Customer customer = customerRepository.find(auth).get(); // 💥
+         
+
+Cart cart = customer.startNewCart();
+```
+
+<aside class="notes"><p>med mindre man gjør sånn da.</p>
+</aside></script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-state="nullpointerexception" data-transition="none-in slide-out"-->
+
+## `NoSuchElementException`
+
+<aside class="notes"><p>Og det er jo også å forvente, siden man gjør en <code>get</code> på noe som ikke finnes.</p>
+<p>Neste slide bare hvis det er tid!</p>
+</aside></script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-transition="slide-in fade-out" -->
+
+##### Case: return tuple
+
+```java
+enum IdentifierType {
+  PHONENUMBER, EMAIL
+
+  static ? parseIdentifier(String identifier) {
+    IdentifierType type = IdentifierType.valueOf(
+                          identifier.split(":")[0]);
+    String value = identifier.split(":")[1];
+    return ?;
+  }
+}
+```
+</script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-transition="fade" -->
+
+##### Case: return tuple
+
+```java
+enum IdentifierType {
+  PHONENUMBER, EMAIL
+
+  static ? parseIdentifier(String identifier) { .. }
+}
+```
+
+##### Et annet sted:
+
+```java
+class MyIdentifier {
+  IdentifierType type;
+  String value;
+  MyIdentifier(IdentifierType type, String value) {..}
+}
+
+String id1 = "PHONENUMBER:12345678";
+String id2 = "EMAIL:me@example.com";
+
+? identifier = IdentifierType.parseIdentifier(id1);
+```
+</script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-transition="fade" -->
+
+##### Løsningsforslag: return tuple
+
+```java
+enum IdentifierType {
+  PHONENUMBER, EMAIL
+
+  static <R> R parseIdentifier(
+        String identifier,
+        BiFunction<IdentifierType, String, R> resultComposer) { 
+    
+    IdentifierType type = IdentifierType.valueOf(
+                          identifier.split(":")[0]);
+    String value = identifier.split(":")[1];
+
+    return resultComposer.apply(type, value);
+  }
+}
+```
+</script></section><section data-markdown><script type="text/template">
+<!-- .slide: data-transition="fade" -->
+
+##### Løsningsforslag: return tuple
+
+```java
+enum IdentifierType {
+  PHONENUMBER, EMAIL
+
+  static <R> R parseIdentifier(
+        String identifier,
+        BiFunction<IdentifierType, String, R> resultComposer) {..}
+}
+```
+
+##### Et annet sted:
+
+```java
+class MyIdentifier {
+  IdentifierType type;
+  String value;
+  MyIdentifier(IdentifierType type, String value) {..}
+}
+
+String id1 = "PHONENUMBER:12345678";
+
+MyIdentifier identifier = IdentifierType
+              .parseIdentifier(id1, MyIdentifier::new);
+```
+
+
+</script></section></section><section  data-markdown><script type="text/template">
+# Vi er <u>alle</u> API-designere!
+</script></section><section  data-markdown><script type="text/template">
+# Et <u>bra</u> API
+
+følger kjente <u>idiomer</u>, og <u>leder</u> andre utviklere til å kode riktig. Når man har lært en del av et API, kjenner man også andre deler av det samme <u>enhetlige</u> API-et.
+
+</script></section></div>
+    </div>
+
+    <script src="./js/reveal.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+      // Optional libraries used to extend on reveal.js
+      var deps = [
+        { src: './plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+        { src: './plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+        { src: './plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+        { src: './plugin/zoom-js/zoom.js', async: true },
+        { src: './plugin/notes/notes.js', async: true },
+        { src: './plugin/math/math.js', async: true }
+      ];
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        dependencies: deps
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal.getQueryHash() || {};
+
+      var options = extend(defaultOptions, {}, queryOptions);
+    </script>
+
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+</html>
