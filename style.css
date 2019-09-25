@@ -11,7 +11,7 @@ h1, h2, h3, h4, h5, h6 {
 
 u {
   text-decoration: none;
-  color: #a61c68;
+  color: #e3349d;
 }
 
 html.ux-for-devs body {
@@ -20,7 +20,28 @@ html.ux-for-devs body {
   background-repeat: no-repeat;
 }
 
+
 html.ux-for-devs h1 {
   color: #f5f5f5;
   background-color: rgba(0,0,0,0.7);
 }
+
+html.instant-javadoc body {
+  background-image: url('img/instant.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+html.nullpointerexception body {
+  background-image: url('https://source.unsplash.com/LA0NPeHdp5A/1600x900');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+html.nullpointerexception h2, h5 {
+  color: #f5f5f5;
+  background-color: rgba(0,0,0,0.6);
+}
+
+
+
