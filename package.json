@@ -14,7 +14,7 @@
   "scripts": {
     "prestart": "echo \"Presentation will be available at http://localhost:$npm_package_config_port/$npm_package_config_presentation\"",
     "start": "$npm_package_config_revealmd $npm_package_config_presentation --port $npm_package_config_port --disable-auto-open",
-    "build": "$npm_package_config_revealmd $npm_package_config_presentation --static build --static-dirs img",
+    "build": "$npm_package_config_revealmd $npm_package_config_presentation --static build --static-dirs img --assets-dir assets",
     "revealmd": "echo \"Usage: npm run revealmd [-- args]\\n\\n\" && $npm_package_config_revealmd"
   }
 }
