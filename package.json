@@ -1,9 +1,19 @@
 {
   "name": "java-apier-intro",
   "version": "1.0.0",
-  "description": "Intro-talk til faggruppemøte for Java- og APIer-faggruppene",
+  "description": "Peptalk til møte med Java- og APIer-faggruppene",
   "license": "MIT",
   "devDependencies": {
     "reveal-md": "^3.3.0"
+  },
+  "config": {
+    "port": 37777,
+    "presentation": "slides.md",
+    "revealmd": "node_modules/reveal-md/bin/reveal-md.js"
+  },
+  "scripts": {
+    "prestart": "echo \"Presentation will be available at http://localhost:$npm_package_config_port/$npm_package_config_presentation\"",
+    "start": "$npm_package_config_revealmd $npm_package_config_presentation --port $npm_package_config_port --disable-auto-open",
+    "build": "$npm_package_config_revealmd $npm_package_config_presentation --static build --static-dirs img"
   }
 }
