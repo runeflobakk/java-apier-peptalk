@@ -27,7 +27,7 @@ html.ux-for-devs h1 {
 }
 
 html.instant-javadoc body {
-  background-image: url('img/instant.png');
+  background-image: url('../img/instant.png');
   background-size: 100%;
   background-repeat: no-repeat;
 }
