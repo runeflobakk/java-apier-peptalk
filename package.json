@@ -4,7 +4,7 @@
   "description": "Peptalk til møte med Java- og APIer-faggruppene",
   "license": "MIT",
   "devDependencies": {
-    "reveal-md": "^3.3.0"
+    "reveal-md": "^5.4.0"
   },
   "config": {
     "port": 37777,
